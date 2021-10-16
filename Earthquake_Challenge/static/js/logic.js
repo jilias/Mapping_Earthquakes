@@ -118,6 +118,25 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
   // Then we add the earthquake layer to our map.
   allEarthquakes.addTo(map);
 
+    // 3. Use d3.json to make a call to get our Tectonic Plate geoJSON data.
+    let tectonicPlates_link = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json";
+  
+    let styleLines = {
+      color: "red",
+      weight: 2
+    };
+  
+    d3.json(tectonicPlates_link).then(function(data) {
+      console.log(data);
+      L.geoJSON(data, {
+        style: styleLines,
+        onEachFeature: function(feature, layer) {
+          layer.bindPopup("<h2>Tectonic plate name: " + feature.properties.Name + "</h2>");
+        }
+      }).addTo(alltectonicPlates);
+      alltectonicPlates.addTo(map);
+    });
+
   // 4. Use the same style as the earthquake data.
   function styleInfo(feature) {
     return {
